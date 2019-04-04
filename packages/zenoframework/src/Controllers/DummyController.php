@@ -7,7 +7,7 @@ class Dummy {
    */
 
   public function none() {
-
+    echo "HEllo nonne";
   }
 
   public function index() {
