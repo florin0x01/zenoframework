@@ -1,0 +1,19 @@
+{
+    "name": "florin0x01/zenoframework",
+    "description": "CRUD Framework for users",
+    "keywords": ["CRUD","REST"],
+    "homepage": "https://github.com/florin0x01/zenoframework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [{
+      "name": "Florin Petrovici",
+      "email": "florin0x01@gmail.com"
+    }],
+    "require": {
+      "monolog/monolog": "1.0.*",
+      "php": ">=5.3.0"    
+    },
+    "autoload": {
+      "psr-4": {"ZenoFramework\\": "src/"}
+    }
+}
