@@ -1,42 +1,58 @@
 <?php
 namespace ZenoFramework\Routing;
 
-$loader = require __DIR__ . '/vendor/autoload.php';
-
 class Router {
-  const NS_CONTROLLERS = "ZenoFramework\controllers";
+  const NS_CONTROLLERS = "ZenoFramework\\Controllers";
+  const DUMMY_CONTROLLER = "ZenoFramework\\Controllers\\DummyController";
   private static $mappedUriToController = array();
   private static $registeredControllers = array();
 
-  public static function map($uri, $controller) {
-    self::$registeredControllers[$controller] = 1;
-    self::$mappedUriToController[$uri] = $controller;
-    $loader->addPsr4(NS_CONTROLLERS. "\\", __DIR__);  
+  public static function map(array $mapping) {
+    static $alreadyMapped = false;
+    if ($alreadyMapped) {
+      return;
+    }   
+    $fqDummy = self::DUMMY_CONTROLLER;
+    self::$registeredControllers["DummyController"] = new $fqDummy();
+    foreach($mapping as $uri=>$controller) {
+      self::$mappedUriToController[$uri] = $controller;
+      list ($ns, ) = self::getNSAndNameFromCtrlName($controller);
+      self::$registeredControllers[$controller] = new $controller();
+    }
+    $alreadyMapped = true;
   }
   
-  private static function serve($uri) {
-    try {
-      list($controller, $action, $id) = self::getControllerActionAndId($uri);
-      if (!array_key_exists($controller, self::$registeredControllers)) {
-        $controller = 'dummy'; 
-        $action = 'none';
-        $id = -1;
-      }
-      return call_user_func([NS_CONTROLLERS. "\\$controller", "$action"], $id);
-      restore_error_handler();
-    } catch(Exception $e) {
-
+  public static function serve() {
+    list($uri, $action, $id) = self::getControllerActionAndId($_SERVER['REQUEST_URI']);
+    if (!array_key_exists($uri, self::$mappedUriToController)) {
+      $controller = self::DUMMY_CONTROLLER; 
+      $action = 'none';
+      $id = -1;
+    } else {
+      $controller = self::$registeredControllers[self::$mappedUriToController[$uri]];
     }
+    call_user_func(array($controller, $action), $id);
   }
-  private static function getControllerActionAndId($uri) {
-    $controller = 'dummy'; 
+  private static function getNSAndNameFromCtrlName(string $controller) {
+    $parts = explode("\\", $controller);
+    $ctrlName = $parts[count($parts)-1];
+    array_splice($parts, 0,count($parts)-1);
+    var_dump($ctrlName);
+    $ns = implode("\\", $parts);
+    return [$ns, $ctrlName];
+  }
+
+  private static function getControllerActionAndId(string $uri) {
+    $controller = self::DUMMY_CONTROLLER; 
     $action = 'none';
     $id = -1;
 
-    $parts = explode("/", $uri);
-    if (empty($parts[0])) {
+    $parts = explode("?", $uri);
+    if (empty($parts[0]) || $parts[0] == "/index.php") {
       array_shift($parts);
     }
+    $controller = $parts[0];
+
     switch(count($parts)) {
       case 1: 
         {
@@ -59,10 +75,6 @@ class Router {
           $action = $parts[2];
         }
         break;
-
-      default:
-        $controller = $parts[0];
-
     } 
     return array($controller, $action, $id);
   }

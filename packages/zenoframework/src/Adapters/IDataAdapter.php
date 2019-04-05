@@ -1,11 +1,11 @@
 <?php
 namespace ZenoFramework\Adapters;
-use ZenoFramework\Adapters\SqlInclusionMode;
+use ZenoFramework\Adapters\InclusionMode;
 
 interface IDataAdapter {
-  public function findBy(SqlInclusionMode $mode, ...$args): array;
-  public function create(... $args);
-  public function delete(... $args);
+  public function findBy(InclusionMode $mode, ...$args): array;
+  public function create(InclusionMode $mode, ...$args);
+  public function delete(InclusionMode $mode, ...$args);
   public function updateBy(...$args);
 }
 

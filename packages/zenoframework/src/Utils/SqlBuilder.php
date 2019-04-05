@@ -1,17 +1,16 @@
 <?php
 namespace ZenoFramework\Utils;
-use ZenoFramework\Adapters\SqlInclusionMode;
-
+use ZenoFramework\Adapters\InclusionMode;
 
 final class SqlBuilder {
-  private static function Helper_InsertOrDeleteString(string $type, string $table, SqlInclusionMode $mode, ...$args) {
+  private static function Helper_InsertOrDeleteString(string $type, string $table, InclusionMode $mode, ...$args) {
     $query = "$type ";
     $keys = array_keys($args);
     $values = array(); 
     $queryString = implode(",", $keys);
     $query .= $queryString;
     $query .= " FROM $table ";
-    if ($mode != SqlInclusionMode::NONE) {
+    if ($mode != InclusionMode::NONE) {
       $query .= " WHERE ";
       foreach($args as $key) {
         $query .= " $key=? $mode";
@@ -33,13 +32,13 @@ final class SqlBuilder {
     return [$query, $values];
   }
 
-  public static function SelectString(string $table, SqlInclusionMode $mode, ...$args) {
+  public static function SelectString(string $table, InclusionMode $mode, ...$args) {
     return self::Helper_InsertOrDeleteString("SELECT ", $table, $mode, $args);
   }
-  public static function DeleteString(string $table, SqlInclusionMode $mode, ...$args): string {
+  public static function DeleteString(string $table, InclusionMode $mode, ...$args): string {
     return self::Helper_InsertOrDeleteString("DELETE ", $table, $mode, $args);
   }
-  public static function InsertString(string $table, SqlInclusionMode $mode, ...$args): string {
+  public static function InsertString(string $table, InclusionMode $mode, ...$args): string {
     $query = "INSERT INTO $table (";
     $keys = array_keys($args);
     $queryString = implode(",", $keys);

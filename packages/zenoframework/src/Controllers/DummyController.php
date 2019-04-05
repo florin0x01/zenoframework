@@ -1,17 +1,17 @@
 <?php
 namespace ZenoFramework\Controllers;
 
-class Dummy {
+class DummyController {
   /**
    * Lists the resource 
    */
 
   public function none() {
-    echo "HEllo nonne";
+    echo "DummyController Invalid Action <br />";
   }
 
   public function index() {
-
+    echo "<br />Dummy index";
   }
   /**
    * Creates the resource

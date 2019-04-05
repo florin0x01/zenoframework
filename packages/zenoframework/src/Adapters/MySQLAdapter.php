@@ -1,6 +1,6 @@
 <?
 namespace ZenoFramework\Adapters;
-use ZenoFramework\Adapters\SqlInclusionMode;
+use ZenoFramework\Adapters\InclusionMode;
 use ZenoFramework\Utils\SqlBuilder;
 
 class MySqlTableAdapter implements IDataAdapter {
@@ -19,26 +19,26 @@ class MySqlTableAdapter implements IDataAdapter {
     $this->table = $table;
   }
     
-  public function findBy(SqlInclusionMode $mode, ...$args): array {
+  public function findBy(InclusionMode $mode, ...$args): array {
     list($query, $values) = SqlBuilder::SelectString($this->table, $mode, $args);
     $prepared = $this->connection->prepare($query);
     $prepared->execute($values);
     $results = $prepared->fetchAll();
     return $results;
   } 
-  public function updateBy(SqlUpdateMode $mode, ...$args): array {
-    list($query, $values) = SqlBuilder::UpdateString($this->table, $mode, $args);
+  public function updateBy(...$args): array {
+    list($query, $values) = SqlBuilder::UpdateString($this->table, $args);
     $prepared = $this->connection->prepare($query);
     $prepared->execute($values);
     $results = $prepared->fetchAll();
     return $results;
   }
-  public function create(...$args) {
+  public function create(InclusionMode $mode, ...$args) {
     list ($query, $values) = Sqlbuilder::InsertString($this->table, $mode, $args);
     $prepared = $this->connection->prepare($query);
     return $prepared->execute($values);
   }
-  public function delete(... $args) {
+  public function delete(InclusionMode $mode, ... $args) {
     list($query, $values) = SqlBuilder::DeleteString($this->table, $mode, $args);
     $prepared = $this->connection->prepare($query);
     return $prepared->execute($values);

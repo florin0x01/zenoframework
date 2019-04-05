@@ -1,7 +1,11 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
-use ZenoFramework\Controllers\DummyController;
+$loader = require __DIR__ . '/vendor/autoload.php';
+require_once 'controllers/UsersController.php';
 
-$d = new Dummy();
-$d->none();
+use Florin\MyApp\UsersController;
+use \ZenoFramework\Routing\Router;
+
+$loader->addPsr4("Florin\\MyApp\\", __DIR__."/Controllers");
+Router::map(array('users' => 'Florin\MyApp\UsersController'));
+Router::serve();
 
