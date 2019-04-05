@@ -5,6 +5,7 @@ class Router {
   const NS_CONTROLLERS = "ZenoFramework\\Controllers";
   const DUMMY_CONTROLLER = "ZenoFramework\\Controllers\\DummyController";
   private static $mappedUriToController = array();
+  private static $registeredRoutes = array();
   private static $registeredControllers = array();
 
   public static function map(array $mapping) {
@@ -13,15 +14,19 @@ class Router {
       return;
     }   
     $fqDummy = self::DUMMY_CONTROLLER;
-    self::$registeredControllers[$fqDummy] = array(
-        'instance' => new $fqDummy(),
+    self::$registeredControllers[$fqDummy] = new $fqDummy();
+    self::$registeredRoutes[$fqDummy] = array(
+        'instance' => self::$registeredControllers[$fqDummy],
         'action' => 'none'
     );
     foreach($mapping as $uri=>$controller) {
       list ($ctrlName, $ctrlMethod) = self::getNameAndMethodFromCtrlName($controller);
+      if (!array_key_exists($ctrlName, self::$registeredControllers)) {
+        self::$registeredControllers[$ctrlName] = new $ctrlName();
+      }
       self::$mappedUriToController[$uri] = $ctrlName;
-      self::$registeredControllers[$ctrlName] = array(
-        'instance' => new $ctrlName(),
+      self::$registeredRoutes[$uri] = array(
+        'instance' => self::$registeredControllers[$ctrlName],
         'action' => $ctrlMethod
       );
     }
@@ -36,9 +41,10 @@ class Router {
       $action = 'none';
       $id = -1;
     } else {
-      $controller = self::$registeredControllers[self::$mappedUriToController[$uri]]['instance'];
-      $action = self::$registeredControllers[self::$mappedUriToController[$uri]]['action'] ?? $action;
+      $controller = self::$registeredRoutes[$uri]['instance'];
+      $action = self::$registeredRoutes[$uri]['action'] ?? $action;
     }
+    var_dump("Call with action $action");
     call_user_func(array($controller, $action), $id);
   }
   public static function getNameAndMethodFromCtrlName(string $controller) {

@@ -3,6 +3,7 @@ namespace Florin\MyApp;
 use ZenoFramework\Controllers\DummyController;
 
 class UsersController extends DummyController {
+
   public function index() {
     echo "Users Controller index here";
   }
@@ -11,5 +12,8 @@ class UsersController extends DummyController {
   }
   public function edit($param) {
     echo "Editing user , param $param";
+  }
+  public function list($id) {
+    echo "List id, $id";
   }
 }
