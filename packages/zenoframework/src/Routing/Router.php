@@ -13,45 +13,50 @@ class Router {
       return;
     }   
     $fqDummy = self::DUMMY_CONTROLLER;
-    self::$registeredControllers["DummyController"] = new $fqDummy();
+    self::$registeredControllers[$fqDummy] = array(
+        'instance' => new $fqDummy(),
+        'action' => 'none'
+    );
     foreach($mapping as $uri=>$controller) {
-      self::$mappedUriToController[$uri] = $controller;
-      list ($ns, ) = self::getNSAndNameFromCtrlName($controller);
-      self::$registeredControllers[$controller] = new $controller();
+      list ($ctrlName, $ctrlMethod) = self::getNameAndMethodFromCtrlName($controller);
+      self::$mappedUriToController[$uri] = $ctrlName;
+      self::$registeredControllers[$ctrlName] = array(
+        'instance' => new $ctrlName(),
+        'action' => $ctrlMethod
+      );
     }
     $alreadyMapped = true;
   }
   
   public static function serve() {
-    list($uri, $action, $id) = self::getControllerActionAndId($_SERVER['REQUEST_URI']);
+    list($uri, $action, $id) = self::parseURIActionAndParam($_SERVER['REQUEST_URI']);
+    var_dump("serve <$uri> <$action> $id ");
     if (!array_key_exists($uri, self::$mappedUriToController)) {
       $controller = self::DUMMY_CONTROLLER; 
       $action = 'none';
       $id = -1;
     } else {
-      $controller = self::$registeredControllers[self::$mappedUriToController[$uri]];
+      $controller = self::$registeredControllers[self::$mappedUriToController[$uri]]['instance'];
+      $action = self::$registeredControllers[self::$mappedUriToController[$uri]]['action'] ?? $action;
     }
     call_user_func(array($controller, $action), $id);
   }
-  private static function getNSAndNameFromCtrlName(string $controller) {
-    $parts = explode("\\", $controller);
-    $ctrlName = $parts[count($parts)-1];
-    array_splice($parts, 0,count($parts)-1);
-    var_dump($ctrlName);
-    $ns = implode("\\", $parts);
-    return [$ns, $ctrlName];
+  public static function getNameAndMethodFromCtrlName(string $controller) {
+    $parts = explode("@", $controller);
+    return [$parts[0], $parts[1]];
   }
 
-  private static function getControllerActionAndId(string $uri) {
-    $controller = self::DUMMY_CONTROLLER; 
+  private static function parseURIActionAndParam(string $uri) {
     $action = 'none';
     $id = -1;
 
     $parts = explode("?", $uri);
     if (empty($parts[0]) || $parts[0] == "/index.php") {
       array_shift($parts);
+      $uri = $parts[0];
     }
-    $controller = $parts[0];
+    $parts = explode("/", $parts[0]);
+    var_dump($parts);
 
     switch(count($parts)) {
       case 1: 
@@ -75,7 +80,8 @@ class Router {
           $action = $parts[2];
         }
         break;
-    } 
-    return array($controller, $action, $id);
+    }
+    $uri = preg_replace('/[0-9]+/', '{id}', $uri);
+    return array($uri, $action, $id);
   }
 } 

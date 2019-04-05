@@ -7,7 +7,11 @@ class DummyController {
    */
 
   public function none() {
-    echo "DummyController Invalid Action <br />";
+    throw new \BadMethodCallException("Invalid Action / route");
+  }
+
+  public function __call ( string $name , array $arguments ) {
+    throw new \BadMethodCallException("Tried to access inexistent method $name");
   }
 
   public function index() {
