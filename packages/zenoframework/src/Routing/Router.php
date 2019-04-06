@@ -37,7 +37,7 @@ class Router {
     list($uri, $action, $id) = self::parseURIActionAndParam($_SERVER['REQUEST_URI']);
     var_dump("serve <$uri> <$action> $id ");
     if (!array_key_exists($uri, self::$mappedUriToController)) {
-      $controller = self::DUMMY_CONTROLLER; 
+      $controller = self::$registeredControllers[self::DUMMY_CONTROLLER]; 
       $action = 'none';
       $id = -1;
     } else {
