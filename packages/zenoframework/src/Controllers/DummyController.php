@@ -1,10 +1,30 @@
 <?php
 namespace ZenoFramework\Controllers;
+use ZenoFramework\Adapters;
+use ZenoFramework\Mappers;
+use ZenoFramework\Config\SqlConfig;
 
 class DummyController {
-  /**
-   * Lists the resource 
-   */
+  private $mapper;
+
+  // MySqlTableAdapter
+  // MySqlTableAdapter
+
+  public function __construct($modelStr="", 
+    $adapterStr='ZenoFramework\Adapters\MySqlTableAdapter', 
+    $mapperStr='ZenoFramework\Mappers\ZenoMapper') {
+    $this->setAdapterMapper($adapterStr, $mapperStr, $modelStr);
+  }
+
+  private function setAdapterMapper($adapterClassName, $mapperClassName, $modelStr) {
+    $adapter = new $adapterClassName();
+    $dsObjectName = strtolower($modelStr);
+    $adapter->setConnectionDetails(
+      SqlConfig::getConnectionDetails(SqlConfig::getCurrentEnvironment()),
+      $dsObjectName
+    );
+    $this->mapper = new $mapperClassName($adapter, $modelStr."Model");  
+  }
 
   public function none() {
     throw new \BadMethodCallException("Invalid Action / route");

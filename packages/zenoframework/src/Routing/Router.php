@@ -35,16 +35,17 @@ class Router {
   
   public static function serve() {
     list($uri, $action, $id) = self::parseURIActionAndParam($_SERVER['REQUEST_URI']);
-    var_dump("serve <$uri> <$action> $id ");
+    echo "<br /> Route $uri $action $id <br />";
     if (!array_key_exists($uri, self::$mappedUriToController)) {
+      echo "NPOT FOUND $uri <br />";
       $controller = self::$registeredControllers[self::DUMMY_CONTROLLER]; 
       $action = 'none';
       $id = -1;
     } else {
       $controller = self::$registeredRoutes[$uri]['instance'];
       $action = self::$registeredRoutes[$uri]['action'] ?? $action;
+
     }
-    var_dump("Call with action $action");
     call_user_func(array($controller, $action), $id);
   }
   public static function getNameAndMethodFromCtrlName(string $controller) {
@@ -52,17 +53,12 @@ class Router {
     return [$parts[0], $parts[1]];
   }
 
-  private static function parseURIActionAndParam(string $uri) {
+  private static function parseURIActionAndParam(string $url) {
     $action = 'none';
     $id = -1;
-
-    $parts = explode("?", $uri);
-    if (empty($parts[0]) || $parts[0] == "/index.php") {
-      array_shift($parts);
-      $uri = $parts[0];
-    }
-    $parts = explode("/", $parts[0]);
-    var_dump($parts);
+    $posIndexPhp = substr($url, strpos($url, "index.php")+strlen("index.php")+1);
+    $parts = explode("/", $posIndexPhp);
+    $uri = $posIndexPhp;
 
     switch(count($parts)) {
       case 1: 
@@ -77,6 +73,7 @@ class Router {
             $id = $parts[1];  
           } else {
             $action = $parts[1];
+            echo "ACTION HERE $parts[1]";
           }
         }
         break;
@@ -88,6 +85,7 @@ class Router {
         break;
     }
     $uri = preg_replace('/[0-9]+/', '{id}', $uri);
-    return array($uri, $action, $id);
+    $ret = array($uri, $action, $id);
+    return $ret;
   }
 } 

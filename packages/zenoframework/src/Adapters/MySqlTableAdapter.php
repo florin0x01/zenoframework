@@ -1,22 +1,16 @@
-<?
+<?php
 namespace ZenoFramework\Adapters;
 use ZenoFramework\Adapters\InclusionMode;
 use ZenoFramework\Utils\SqlBuilder;
+use ZenoFramework\Config\Sql;
 
 class MySqlTableAdapter implements IDataAdapter {
   private $connection;
   protected $table;
 
-  public function __construct($connection, $table) {
-    // $dsn = sprintf('mysql:dbname=%s;host=%s', $name, $host);
-    // $this->connection = new \PDO($dsn, $user, $password,
-    // [
-    //   \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-    //   \PDO::ATTR_PERSISTENT => true
-    // ]);
-    //   }
+  public function setConnectionDetails($connection, $table) {
     $this->connection = $connection;
-    $this->table = $table;
+    $this->table = $table; 
   }
     
   public function findBy(InclusionMode $mode, ...$args): array {

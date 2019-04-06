@@ -7,6 +7,7 @@ interface IDataAdapter {
   public function create(InclusionMode $mode, ...$args);
   public function delete(InclusionMode $mode, ...$args);
   public function updateBy(...$args);
+  public function setConnectionDetails($connectionObj, $dataSourceObj);
 }
 
 

@@ -1,8 +1,12 @@
 <?php
-namespace Florin\MyApp;
+namespace Florin\MyApp\Controllers;
 use ZenoFramework\Controllers\DummyController;
 
 class UsersController extends DummyController {
+
+  public function __construct() {
+    parent::__construct("User");
+  }
 
   public function index() {
     echo "Users Controller index here";

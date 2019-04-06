@@ -1,0 +1,17 @@
+{
+  "require": {
+    "monolog/monolog": "1.0.*",
+    "florin0x01/zenoframework": "dev-master",
+    "php": ">=7.0",
+    "robmorgan/phinx": "^0.10.6"    
+  },
+  "repositories": [
+    {
+        "type": "path",
+        "url":  "../packages/zenoframework"
+    }
+  ],
+  "config": {
+    "disable-tls": true
+  }
+}
