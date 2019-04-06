@@ -24,9 +24,9 @@ Router::map(
   array(
     'users/index' => 'Florin\MyApp\Controllers\UsersController@index',
     'users' => 'Florin\MyApp\Controllers\UsersController@index',
-    'users/create' => 'Florin\MyApp\Controllers\UsersController@create',
-    'users/{id}/edit' => 'Florin\MyApp\Controllers\UsersController@edit',
-    'users/{id}' => 'Florin\MyApp\Controllers\UsersController@list'
+    'users/create' => 'Florin\MyApp\Controllers\UsersController@create#POST',
+    'users/{id}/edit' => 'Florin\MyApp\Controllers\UsersController@edit#PUT',
+    'users/{id}' => 'Florin\MyApp\Controllers\UsersController@list#GET,DELETE'
   )
 );
 

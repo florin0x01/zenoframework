@@ -12,7 +12,7 @@ class Router {
     static $alreadyMapped = false;
     if ($alreadyMapped) {
       return;
-    }   
+    }
     $fqDummy = self::DUMMY_CONTROLLER;
     self::$registeredControllers[$fqDummy] = new $fqDummy();
     self::$registeredRoutes[$fqDummy] = array(
@@ -20,15 +20,20 @@ class Router {
         'action' => 'none'
     );
     foreach($mapping as $uri=>$controller) {
-      list ($ctrlName, $ctrlMethod) = self::getNameAndMethodFromCtrlName($controller);
-      if (!array_key_exists($ctrlName, self::$registeredControllers)) {
-        self::$registeredControllers[$ctrlName] = new $ctrlName();
+      list ($ctrlName, $ctrlAction, $ctrlMethods) = self::getNameActionAndMethodFromControllerName($controller);
+      var_dump("OOO $ctrlMethods");
+      foreach($ctrlMethods as $k=>$ctrlMethod) {
+        echo "Got $ctrlMethod $ctrlAction for $uri <br />";
+        if (!array_key_exists($ctrlName, self::$registeredControllers)) {
+          self::$registeredControllers[$ctrlName] = new $ctrlName();
+        }
+        self::$mappedUriToController[$uri] = $ctrlName;
+        echo "REG with $ctrlMethod for $uri <br />";
+        self::$registeredRoutes[$uri][$ctrlMethod] = array(
+          'instance' => self::$registeredControllers[$ctrlName],
+          'action' => $ctrlAction
+        );
       }
-      self::$mappedUriToController[$uri] = $ctrlName;
-      self::$registeredRoutes[$uri] = array(
-        'instance' => self::$registeredControllers[$ctrlName],
-        'action' => $ctrlMethod
-      );
     }
     $alreadyMapped = true;
   }
@@ -42,15 +47,31 @@ class Router {
       $action = 'none';
       $id = -1;
     } else {
-      $controller = self::$registeredRoutes[$uri]['instance'];
-      $action = self::$registeredRoutes[$uri]['action'] ?? $action;
-
+      $controller = self::$registeredRoutes[$uri][$_SERVER['REQUEST_METHOD']]['instance'];
+      $action = self::$registeredRoutes[$uri][$_SERVER['REQUEST_METHOD']]['action'] ?? $action;
     }
     call_user_func(array($controller, $action), $id);
   }
-  public static function getNameAndMethodFromCtrlName(string $controller) {
+  public static function getNameActionAndMethodFromControllerName(string $controller) {
     $parts = explode("@", $controller);
-    return [$parts[0], $parts[1]];
+    $methods = explode("#", $parts[1]);
+    if (count($methods) == 2) {
+      $methods = $methods[1];
+      $methods = explode(",", $methods);
+    } else {
+      $methods = ['GET'];
+    }
+    $nameIncludingNamespace = $parts[0];
+    $hashPosition = strpos($parts[1], "#");
+    if ($hashPosition === FALSE) {
+      $actionToTake = $parts[1];
+    } else {
+      $actionToTake = substr($parts[1], 0, strpos($parts[1], "#")); 
+    }
+    $returnedValue = array_merge(array($nameIncludingNamespace, $actionToTake), $methods);
+    var_dump("RET VAL:");
+    var_dump($returnedValue);
+    return $returnedValue;
   }
 
   private static function parseURIActionAndParam(string $url) {
