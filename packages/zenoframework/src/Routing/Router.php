@@ -20,15 +20,16 @@ class Router {
         'action' => 'none'
     );
     foreach($mapping as $uri=>$controller) {
-      list ($ctrlName, $ctrlAction, $ctrlMethods) = self::getNameActionAndMethodFromControllerName($controller);
-      var_dump("OOO $ctrlMethods");
+      $parsedResult = self::getNameActionAndMethodFromControllerName($controller);
+      $ctrlName = $parsedResult['name'];
+      $ctrlAction = $parsedResult['action'];
+      $ctrlMethods = $parsedResult['methods'];
+
       foreach($ctrlMethods as $k=>$ctrlMethod) {
-        echo "Got $ctrlMethod $ctrlAction for $uri <br />";
         if (!array_key_exists($ctrlName, self::$registeredControllers)) {
           self::$registeredControllers[$ctrlName] = new $ctrlName();
         }
         self::$mappedUriToController[$uri] = $ctrlName;
-        echo "REG with $ctrlMethod for $uri <br />";
         self::$registeredRoutes[$uri][$ctrlMethod] = array(
           'instance' => self::$registeredControllers[$ctrlName],
           'action' => $ctrlAction
@@ -68,9 +69,7 @@ class Router {
     } else {
       $actionToTake = substr($parts[1], 0, strpos($parts[1], "#")); 
     }
-    $returnedValue = array_merge(array($nameIncludingNamespace, $actionToTake), $methods);
-    var_dump("RET VAL:");
-    var_dump($returnedValue);
+    $returnedValue = array_merge(array('name' => $nameIncludingNamespace, 'action' => $actionToTake), array('methods' => $methods));
     return $returnedValue;
   }
 
