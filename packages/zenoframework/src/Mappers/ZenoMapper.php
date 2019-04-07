@@ -19,12 +19,14 @@ class ZenoMapper {
     return $this->rowToModel($result);
   }
 
-  public function create(InclusionMode $mode, ... $args) {
-    $result = $this->adapter->create($mode, $args);
+  public function create($args) {
+    $result = $this->adapter->create($args);
     if ($result === null) {
       throw new \InvalidArgumentException("Record not created , supplied args: ".implode(" ", $args));
     }
-    return $this->rowToModel($result);
+    if (is_array($result))
+      return $this->rowToModel($result);
+    return $result;
   }
 
   public function delete(InclusionMode $mode, ... $args) {

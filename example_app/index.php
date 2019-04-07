@@ -15,7 +15,8 @@ $user = "root";
 $password = "secret";
 $connection = new \PDO($dsn, $user, $password, [
        \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_OBJ,
-       \PDO::ATTR_PERSISTENT => true
+       \PDO::ATTR_PERSISTENT => true,
+       \PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING
  ]);
 
 SqlConfig::setConnectionDetails('development', $connection);

@@ -5,10 +5,7 @@ use ZenoFramework\Mappers;
 use ZenoFramework\Config\SqlConfig;
 
 class DummyController {
-  private $mapper;
-
-  // MySqlTableAdapter
-  // MySqlTableAdapter
+  protected $mapper;
 
   public function __construct($modelStr="", 
     $adapterStr='ZenoFramework\Adapters\MySqlTableAdapter', 
@@ -18,12 +15,16 @@ class DummyController {
 
   private function setAdapterMapper($adapterClassName, $mapperClassName, $modelStr) {
     $adapter = new $adapterClassName();
-    $dsObjectName = strtolower($modelStr);
+    $dsObjectName = strtolower($modelStr)."s";
     $adapter->setConnectionDetails(
       SqlConfig::getConnectionDetails(SqlConfig::getCurrentEnvironment()),
       $dsObjectName
     );
     $this->mapper = new $mapperClassName($adapter, $modelStr."Model");  
+  }
+
+  protected function httpVerb() {
+    return $_SERVER['REQUEST_METHOD'];
   }
 
   public function none() {

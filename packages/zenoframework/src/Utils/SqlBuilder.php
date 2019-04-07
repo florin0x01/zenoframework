@@ -38,16 +38,18 @@ final class SqlBuilder {
   public static function DeleteString(string $table, InclusionMode $mode, ...$args): string {
     return self::Helper_InsertOrDeleteString("DELETE ", $table, $mode, $args);
   }
-  public static function InsertString(string $table, InclusionMode $mode, ...$args): string {
+  public static function InsertString(string $table, $args): array {
     $query = "INSERT INTO $table (";
     $keys = array_keys($args);
+    var_dump("KEYS ");
+    var_dump($keys);
     $queryString = implode(",", $keys);
     $query .= $queryString.") VALUES(";
     foreach($args as $key) {
       $query .= "?,";
     }
-    $query .= ")";
     $query = substr($query, 0, -1);
+    $query .= ")";
     $values = array_values($args);
     return [$query, $values];
   }
