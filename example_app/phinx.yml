@@ -7,7 +7,7 @@ environments:
     default_database: development
     production:
         adapter: mysql
-        host: localhost
+        host: testbox.test
         name: my_app
         user: my_app
         pass: 'secret'
@@ -16,7 +16,7 @@ environments:
 
     development:
         adapter: mysql
-        host: localhost
+        host: testbox.test
         name: my_app
         user: root
         pass: 'secret'
@@ -25,7 +25,7 @@ environments:
 
     testing:
         adapter: mysql
-        host: localhost
+        host: testbox.test
         name: my_app
         user: my_app
         pass: 'secret'

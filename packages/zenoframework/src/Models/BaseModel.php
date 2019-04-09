@@ -18,6 +18,6 @@ class BaseModel
         if (count($returnedObjects)>1) {
             return $returnedObjects;
         }
-        return $returnedObjects[0];
+        return @$returnedObjects[0];
     }
 }

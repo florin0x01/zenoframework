@@ -1,4 +1,4 @@
-Assuming 
+Assuming curl is installed on system and testbox.test contains the repo
 
 For creating users:
 
@@ -20,3 +20,5 @@ For listing all users:
 
 http://testbox.test:8081/example_app/index.php?users
 
+For users with avatars:
+see file example_usage_users.txt

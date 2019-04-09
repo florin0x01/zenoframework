@@ -16,7 +16,6 @@ final class SqlBuilder
         //Remove last "AND" or "OR"
         $query = substr($query, 0, -strlen($mode));
         $values = array_values($args);
-        print ("Query is $query <br />");
         return [$query, $values];
     }
 
@@ -30,7 +29,6 @@ final class SqlBuilder
         }
         $query = substr($query, 0, -1);
         $query .= " WHERE id=$fromId";
-        print ("Query is $query <br />");
         $values = array_values($destArgs);
         return [$query, $values];
     }
@@ -49,7 +47,6 @@ final class SqlBuilder
             $query = substr($query, 0, -strlen($mode));
             $values = array_values($args);
         }
-        print ("Query is $query <br />");
         return [$query, $values];
     }
 

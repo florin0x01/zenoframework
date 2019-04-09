@@ -27,7 +27,8 @@ Router::map(
     'users' => 'Florin\MyApp\Controllers\UsersController@index',
     'users/create' => 'Florin\MyApp\Controllers\UsersController@create#POST',
     'users/{id}/edit' => 'Florin\MyApp\Controllers\UsersController@edit#PUT',
-    'users/{id}' => 'Florin\MyApp\Controllers\UsersController@handleListOrDelete#GET,DELETE'
+    'users/{id}' => 'Florin\MyApp\Controllers\UsersController@handleListOrDelete#GET,DELETE',
+    'users/{id}/avatar' => 'Florin\MyApp\Controllers\UsersController@user_avatar'
     )
 );
 

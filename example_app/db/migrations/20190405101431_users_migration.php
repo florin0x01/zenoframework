@@ -37,7 +37,7 @@ class UsersMigration extends AbstractMigration
             ->addColumn('first_name', 'string')
             ->addColumn('last_name', 'string')
             ->addColumn('password', 'string')
-            ->addColumn('avatar', 'binary')
+            ->addColumn('avatar', 'blob')
             ->create();
     }
 }

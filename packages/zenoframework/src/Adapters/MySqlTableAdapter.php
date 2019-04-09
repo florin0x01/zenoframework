@@ -36,7 +36,7 @@ class MySqlTableAdapter implements IDataAdapter
     }
     public function create(array $args)
     {
-        list ($query, $values) = Sqlbuilder::InsertString($this->table, $args);
+        list ($query, $values) = SqlBuilder::InsertString($this->table, $args);
         $prepared = $this->connection->prepare($query);
         $res = $prepared->execute($values);
         if ($res == false) {
