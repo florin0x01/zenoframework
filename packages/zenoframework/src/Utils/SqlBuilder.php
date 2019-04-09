@@ -21,8 +21,6 @@ final class SqlBuilder
 
     public static function UpdateString(string $table, $destArgs, $fromId)
     {
-        print ("UpdateString $table $fromId ");
-        print_r($destArgs);
         $query = "UPDATE $table SET ";
         foreach ($destArgs as $key => $val) {
             $query .= "$key=?,";

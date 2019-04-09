@@ -11,7 +11,11 @@ class BaseModel
             $obj = new $calledClass();
             $cVars = get_class_vars($calledClass);
             foreach ($cVars as $variable => $val) {
-                $obj->$variable = $row->$variable ?? null;
+                if (is_object($row)) {
+                    $obj->$variable = $row->$variable ?? null;
+                } else {
+                    $obj->$variable = $row[$variable] ?? null;
+                }
             }
             $returnedObjects[] = $obj;
         }

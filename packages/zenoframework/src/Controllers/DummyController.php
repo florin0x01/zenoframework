@@ -46,14 +46,14 @@ class DummyController
 
     public function index()
     {
-        echo "<br />Dummy index";
+        echo "Dummy index";
     }
   /**
    * Creates the resource
    */
     public function create()
     {
-        throw new Exception("Please implement this in the parent class");
+        throw new \Exception("Please implement this in the parent class");
     }
 
   /**
@@ -63,7 +63,7 @@ class DummyController
    */
     public function show($id)
     {
-        throw new Exception("Please implement this in the parent class");
+        throw new \Exception("Please implement this in the parent class");
     }
 
   /**
@@ -73,7 +73,7 @@ class DummyController
    */
     public function update($id)
     {
-        throw new Exception("Please implement this in the parent class");
+        throw new \Exception("Please implement this in the parent class");
     }
 
   /**
@@ -83,7 +83,7 @@ class DummyController
    */
     public function delete($id)
     {
-        throw new Exception("Please implement this in the parent class");
+        throw new \Exception("Please implement this in the parent class");
     }
 
   /**
@@ -91,6 +91,6 @@ class DummyController
    */
     public function search(array $params)
     {
-        throw new Exception("Please implement this in the parent class");
+        throw new \Exception("Please implement this in the parent class");
     }
 }
