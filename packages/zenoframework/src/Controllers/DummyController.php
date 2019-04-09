@@ -7,20 +7,20 @@ use ZenoFramework\Config\SqlConfig;
 class DummyController {
   protected $mapper;
 
-  public function __construct($modelStr="", 
+  public function __construct($namespace="", $modelStr="", 
     $adapterStr='ZenoFramework\Adapters\MySqlTableAdapter', 
     $mapperStr='ZenoFramework\Mappers\ZenoMapper') {
-    $this->setAdapterMapper($adapterStr, $mapperStr, $modelStr);
+    $this->setAdapterMapper($namespace, $adapterStr, $mapperStr, $modelStr);
   }
 
-  private function setAdapterMapper($adapterClassName, $mapperClassName, $modelStr) {
+  private function setAdapterMapper($namespace, $adapterClassName, $mapperClassName, $modelStr) {
     $adapter = new $adapterClassName();
     $dsObjectName = strtolower($modelStr)."s";
     $adapter->setConnectionDetails(
       SqlConfig::getConnectionDetails(SqlConfig::getCurrentEnvironment()),
       $dsObjectName
     );
-    $this->mapper = new $mapperClassName($adapter, $modelStr."Model");  
+    $this->mapper = new $mapperClassName($adapter, $namespace."\\".$modelStr."Model");  
   }
 
   protected function httpVerb() {
@@ -42,7 +42,7 @@ class DummyController {
    * Creates the resource
    */
   public function create() {
-
+    throw new Exception("Please implement this in the parent class");
   }
 
   /**
@@ -51,7 +51,7 @@ class DummyController {
    * @param int $id
    */
   public function show($id) {
-
+    throw new Exception("Please implement this in the parent class");
   }
 
   /**
@@ -60,7 +60,7 @@ class DummyController {
    * @param int $id
    */
   public function update($id) {
-
+    throw new Exception("Please implement this in the parent class");
   }
 
   /**
@@ -69,14 +69,14 @@ class DummyController {
    * @param int $id
    */
   public function delete($id) {
-
+    throw new Exception("Please implement this in the parent class");
   }
 
   /**
    * Searches by some params
    */
   public function search(array $params) {
-
+    throw new Exception("Please implement this in the parent class");
   }
 
 }

@@ -2,10 +2,8 @@
 namespace ZenoFramework\Views;
 
 class BaseView {
-  public static function renderJSON(array $data) {
+  public static function renderJSON($data, $status=200) {
+  	http_response_code($status);
     echo json_encode($data);
-  }
-  private function __construct() {
-
   }
 }

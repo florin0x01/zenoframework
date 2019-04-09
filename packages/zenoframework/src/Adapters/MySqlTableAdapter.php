@@ -13,19 +13,21 @@ class MySqlTableAdapter implements IDataAdapter {
     $this->table = $table; 
   }
     
-  public function findBy(InclusionMode $mode, ...$args): array {
+  public function findBy(string $mode, $args) {
     list($query, $values) = SqlBuilder::SelectString($this->table, $mode, $args);
     $prepared = $this->connection->prepare($query);
     $prepared->execute($values);
     $results = $prepared->fetchAll();
     return $results;
   } 
-  public function updateBy(...$args): array {
-    list($query, $values) = SqlBuilder::UpdateString($this->table, $args);
+  public function updateBy($args, $id) {
+    list($query, $values) = SqlBuilder::UpdateString($this->table, $args, $id);
     $prepared = $this->connection->prepare($query);
-    $prepared->execute($values);
-    $results = $prepared->fetchAll();
-    return $results;
+    $res = $prepared->execute($values);
+    if ($res == false) {
+      return json_encode($prepared->errorInfo());
+    }
+    return $res;
   }
   public function create($args) {
     list ($query, $values) = Sqlbuilder::InsertString($this->table, $args);
@@ -39,7 +41,7 @@ class MySqlTableAdapter implements IDataAdapter {
     }
     return $res;
   }
-  public function delete(InclusionMode $mode, ... $args) {
+  public function delete(string $mode, $args) {
     list($query, $values) = SqlBuilder::DeleteString($this->table, $mode, $args);
     $prepared = $this->connection->prepare($query);
     return $prepared->execute($values);

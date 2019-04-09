@@ -11,7 +11,7 @@ class ZenoMapper {
     $this->adapter = $adapter;
     $this->modelToReturn = $modelToReturn;
   }
-  public function findBy(InclusionMode $mode, ... $args) {
+  public function findBy(string $mode, $args) {
     $result = $this->adapter->findBy($mode, $args);
     if ($result === null) {
       throw new \InvalidArgumentException("Record not found , supplied args: ".implode(" ", $args));
@@ -29,24 +29,27 @@ class ZenoMapper {
     return $result;
   }
 
-  public function delete(InclusionMode $mode, ... $args) {
+  public function delete($mode, $args) {
     $result = $this->adapter->delete($mode, $args);
     if ($result === null) {
       throw new \InvalidArgumentException("Record not found , supplied args: ".implode(" ", $args));
     }
-    return $this->rowToModel($result);
+    if (is_array($result))
+      return $this->rowToModel($result);
+    return $result;
   }
 
-  public function updateBy(... $args) {
-    $result = $this->adapter->updateBy($args);
+  public function updateBy($args, $id) {
+    $result = $this->adapter->updateBy($args, $id);
     if ($result === null) {
       throw new \InvalidArgumentException("Record not found , supplied args: ".implode(" ", $args));
     }
-    return $this->rowToModel($result);
+    return $result;
   }
 
   private function rowToModel(array $row)
   {
-    return call_user_func(["$this->modelToReturn", "fromState", $row]);
+    $callable_cb = "$this->modelToReturn::fromState";
+    return call_user_func($callable_cb, $row);
   }
 }
