@@ -1,0 +1,22 @@
+Assuming 
+
+For creating users:
+
+curl -X POST -d "email='n3@n3.com'&first_name='fname1'&last_name='lname1'&password='p1'" http://testbox.test:8081/example_app/index.php?users/create
+
+For deleting user with id 1 from DB :
+
+curl -X DELETE http://testbox.test:8081/example_app/index.php?users/1
+
+For updating user with id 1 from DB:
+curl -X PUT -d "email='n3@n3.com'&first_name='gicu'&last_name='lname1'&password='p1'" http://testbox.test:8081/example_app/index.php?users/2/edit
+
+
+For listing user with id 1 from DB:
+
+http://testbox.test:8081/example_app/index.php?users/1
+
+For listing all users:
+
+http://testbox.test:8081/example_app/index.php?users
+

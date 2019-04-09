@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="zenoframework-example-app" default="dist">
+<target name="phpcs">
+ <phpcodesniffer standard="PSR2"
+      description="Run PSR2 standards over the codebase"
+      haltonerror="true">
+   <fileset dir="./">
+   	 <exclude name="./vendor" />
+     <include name="**/*.php" />
+   </fileset>
+   <fileset dir="../packages/zenoframework">
+   	 <exclude name="../packages/zenoframework/vendor" />
+     <include name="**/*.php" />
+   </fileset>
+   <formatter type="full" usefile="false"/>
+ </phpcodesniffer>
+</target>
+</project>

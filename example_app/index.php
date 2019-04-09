@@ -22,14 +22,13 @@ $connection = new \PDO($dsn, $user, $password, [
 SqlConfig::setConnectionDetails('development', $connection);
 
 Router::map(
-  array(
+    array(
     'users/index' => 'Florin\MyApp\Controllers\UsersController@index',
     'users' => 'Florin\MyApp\Controllers\UsersController@index',
     'users/create' => 'Florin\MyApp\Controllers\UsersController@create#POST',
     'users/{id}/edit' => 'Florin\MyApp\Controllers\UsersController@edit#PUT',
     'users/{id}' => 'Florin\MyApp\Controllers\UsersController@handleListOrDelete#GET,DELETE'
-  )
+    )
 );
 
 Router::serve();
-

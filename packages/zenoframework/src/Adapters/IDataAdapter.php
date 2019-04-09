@@ -1,12 +1,11 @@
 <?php
 namespace ZenoFramework\Adapters;
 
-interface IDataAdapter {
-  public function findBy(string $mode, $args);
-  public function create($args);
-  public function delete(string $mode, $args);
-  public function updateBy($destArgs, $id);
-  public function setConnectionDetails($connectionObj, $dataSourceObj);
+interface IDataAdapter
+{
+    public function findBy(string $mode, array $args);
+    public function create(array $args);
+    public function delete(string $mode, array $args);
+    public function updateBy(array $destArgs, string $id);
+    public function setConnectionDetails($connectionObj, $dataSourceObj);
 }
-
-
