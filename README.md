@@ -9,8 +9,12 @@ Uses the entity mapper design pattern.
  -> example_app folder 
 
  example_app/Controllers/ folder:
-  the particular Controller(s) which derive from the ZenoFramework ones
+  
+  the particular Controller(s) which derive from the ZenoFramework ones;
+
+
  example_app/db : db schema migration
+
  example_app/Models => the users model
 
 example_app folder uses the ZenoFramework framework which is found locally (for demo purposes) under packages/zenoframework, via composer local path. 
