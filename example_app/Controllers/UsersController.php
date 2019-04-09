@@ -100,7 +100,7 @@ class UsersController extends DummyController
 
     public function delete($id)
     {
-        $response = $this->mapper->delete(InclusionMode::NONE, array('id' => $id));
+        $response = $this->mapper->delete(InclusionMode::AND, array('id' => $id));
         BaseView::renderJSON(['status' => $response]);
     }
 }
